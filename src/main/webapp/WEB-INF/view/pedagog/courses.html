@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Courses</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+</head>
+<body>
+	<div th:replace="templates/pedagogueHeader :: headertemplate"></div>
+	<div th:switch="${pedagogues}">
+		<h2>
+			All Courses Created <br> <a
+				th:href="@{/pedagogue/goToAddCourse}" class="btn btn-success">Add
+				Course</a>
+		</h2>
+
+		<div th:if="${message}" th:text="${message}"
+			th:class="${'alert ' + alertClass}" role="alert"></div>
+		<div th:case="*">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">Course Name</th>
+						<th scope="col">Start Date</th>
+						<th scope="col">Finish Date</th>
+						<th scope="col">Description</th>
+						<th scope="col">Book</th>
+						<th scope="col">Students Registered</th>
+						<th scope="col">Action</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="course : ${courses}">
+						<td scope="row" th:text="${course.name}"></td>
+						<td th:text="${course.startDate}"></td>
+						<td th:text="${course.finishDate}"></td>
+						<td th:text="${course.description}"></td>
+						<td th:text="${course.book}"></td>
+						<td><p th:each="user: ${course.userDtos}"
+								th:text="${user.firstname +' '+user.lastname}"></p></td>
+						<td><a
+							th:href="@{/pedagogue/addStudentToCourse/{id}(id=${course.id})}"
+							class="btn btn-outline-primary">Add Student</a></td>
+
+						<td><a
+							th:href="@{/pedagogue/createTest/{id}(id=${course.id})}"
+							class="btn btn-outline-primary">Add Test</a></td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+</body>
+</html>

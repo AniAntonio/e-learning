@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="${role == 'student' ?'Add Student': 'Add Pedagogue'}"></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+</head>
+<body style="background-color: #D3D3D3;">
+	<div th:replace="templates/header :: headertemplate"></div>
+	<div class="form">
+		<div th:if="${message}" th:text="${message}"
+			th:class="${'alert ' + alertClass}"></div>
+		<form class="form-horizontal" action="#" th:action="@{/admin/addUser}"
+			th:object="${user}" th:method="post">
+			<input type="hidden" th:field="*{id}" th:value="${user.id}" /> <input
+				type="hidden" th:value="${role == 'student' ? 3: 2}" name="idRole">
+			<div class="form-group">
+				<label for="firstname" class="control-label col-sm-4">Firstname</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{firstname}"
+						id="firstname" placeholder="Firstname must be 3-50 letters"
+						th:required="required" th:minlength="3" th:maxlength="50">
+				</div>
+				<span th:if="${#fields.hasErrors('Firstname')}"
+					th:errors="*{Firstname}"></span>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="lastname">Lastname</label>
+				<div class="col-sm-8">
+					<input class="form-control" th:field="*{lastname}" id="lastname"
+						placeholder="lastname must be 3-50 letters" th:required="required"
+						th:minlength="3" th:maxlength="50" /> <span
+						th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="username">Username</label>
+				<div class="col-sm-8">
+					<input class="form-control" th:field="*{username}" id="username"
+						placeholder="username must be 3-50 letters" th:required="required"
+						th:minlength="3" th:maxlength="50" /> <span
+						th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="password">Password</label>
+				<div class="col-sm-8">
+					<input class="form-control" th:field="*{password}" id="password"
+						placeholder="lastname must be 3-50 letters" th:required="required"
+						th:minlength="3" th:maxlength="50" /> <span
+						th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="email">Email</label>
+				<div class="col-sm-8">
+					<input class="form-control" th:field="*{email}" id="email"
+						placeholder="email not correct" th:required="email"
+						th:minlength="3" th:maxlength="50" /> <span
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="facultySelect">Faculty</label>
+				<select class="form-control" name="idFaculty" id="facultySelect">
+					<option th:each="faculty : ${faculties}" th:value="${faculty.id}"
+						th:text="${faculty.name}"></option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="regDate" class="control-label col-sm-4">Registration
+					Date</label>
+				<div class="col-sm-8">
+					<input type="date" th:field="*{regDate}" id="regDate"
+						class="form-control" placeholder="regDate" th:required="required">
+					<span th:if="${#fields.hasErrors('regDate')}"
+						th:errors="*{regDate}"></span>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+
+					<div class="text-center">
+						<button class="btn btn-success" type="submit"
+							th:text="${role == 'student' ? 'Add Student': 'Add Pedagogue'}"></button>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+</body>
+</html>

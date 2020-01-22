@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Tests</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+</head>
+<body>
+	<div th:replace="templates/pedagogueHeader :: headertemplate"></div>
+	<div th:switch="${tests}">
+		<h2>All Tests</h2>
+		<div th:if="${message}" th:text="${message}"
+			th:class="${'alert ' + alertClass}" role="alert"></div>
+		<div th:case="*">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">Course Name</th>
+						<th scope="col">Test Description</th>
+						<th scope="col">test Date</th>
+						<th scope="col">Duration</th>
+						<th scope="col">Action</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody th:if="${#lists.isEmpty(tests)}">
+					<tr>
+						<td colspan="3">No tests found.</td>
+					</tr>
+				</tbody>
+				<tbody>
+					<tr th:each="test : ${tests}">
+						<td scope="row" th:text="${test.courseDto.name}"></td>
+						<td th:text="${test.description}"></td>
+						<td th:text="${test.testDate}"></td>
+						<td th:text="${test.duration}"></td>
+						<td><a th:href="@{/pedagogue/test/grades/{id}(id=${test.id})}"
+							class="btn btn-info">View Grades</a></td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+</body>
+</html>

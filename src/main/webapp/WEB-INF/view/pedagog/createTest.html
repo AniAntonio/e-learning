@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Create Test</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+</head>
+<body style="background-color: #D3D3D3;">
+	<div th:replace="templates/pedagogueHeader :: headertemplate"></div>
+	<div class="form">
+		<div th:if="${message}" th:text="${message}"
+			th:class="${'alert ' + alertClass}"></div>
+		<form class="form-horizontal" action="#"
+			th:action="@{/pedagogue/addTest}" th:object="${testDto}"
+			th:method="post">
+			<input type="hidden" th:field="*{courseId}"
+				th:value="${testDto.courseId}" />
+			<div class="form-group">
+				<label for="description" class="control-label col-sm-4">Test
+					Description</label>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" th:field="*{description}"
+						id="description" placeholder="Name must be 10-100 letters"
+						th:required="required" th:minlength="10" th:maxlength="100">
+				</div>
+				<span th:if="${#fields.hasErrors('description')}"
+					th:errors="*{description}"></span>
+			</div>
+
+			<div class="form-group">
+				<label for="testDate" class="control-label col-sm-4">Test
+					Date </label>
+				<div class="col-sm-8">
+					<input type="date" th:field="*{testDate}" id="testDate"
+						class="form-control" placeholder="testDate" th:required="required">
+					<span th:if="${#fields.hasErrors('testDate')}" th:errors="testDate"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="book">Duration</label>
+				<div class="col-sm-8">
+					<input class="form-control" th:field="*{duration}" id="testDate"
+						placeholder="duration must be in minutes" th:required="required"
+						th:minlength="5" th:maxlength="50" /> <span
+						th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="questions" class="control-label col-sm-4">Questions</label>
+				<div class="col-sm-8">
+					<select th:field="*{questionIds}" class="form-control"
+						id="dropOperator" multiple="multiple" th:required="required">
+						<option th:each="question : ${testDto.questions}"
+							th:value="${question.id}" th:text="${question.description}"></option>
+					</select>
+				</div>
+			</div>
+
+			<div class="container">
+				<div class="row">
+					<div class="text-center">
+						<button class="btn btn-success" type="submit">Add Test</button>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Home</title>
+<link href="webjars/bootstrap/3.3.2/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="webjars/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+</head>
+<body>
+	<div th:replace="templates/pedagogueHeader :: headertemplate"></div>
+	<div class="jumbotron text-center">
+		<h1>E-Learning</h1>
+	</div>
+	<div class="container text-center">
+			<div th:if="${message}" th:text="${message}"
+			th:class="${'alert ' + alertClass}" role="alert"></div>
+		<div class="row">
+			<div>
+				<table class="table table-striped">
+					<thead>
+						<tr th:object="${user}">
+
+							<th class="text-center" scope="col">Details</th>
+
+						</tr>
+					</thead>
+					<tbody>
+
+						<tr th:object="${user}">
+							<td th:text="FirstName"></td>
+							<td th:text="${user.firstname}"></td>
+						</tr>
+						<tr th:object="${user}">
+							<td th:text="LastName"></td>
+							<td th:text="${user.lastname}"></td>
+						</tr>
+
+						<tr th:object="${user}">
+							<td th:text="username"></td>
+							<td th:text="${user.username}"></td>
+						</tr>
+
+						<tr th:object="${user}">
+							<td th:text="Password"></td>
+							<td th:text="${user.password}"></td>
+						</tr>
+						<tr th:object="${user}">
+							<td th:text="Email"></td>
+							<td th:text="${user.email}"></td>
+						</tr>
+						<tr th:object="${user}">
+							<td th:text="Faculty"></td>
+							<td th:text="${user.facultyDto.name}"></td>
+						</tr>
+						<tr th:object="${user}">
+							<td>Registration Date</td>
+							<td th:text="${user.regDate}"></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+	</div>
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+</body>
+</html>

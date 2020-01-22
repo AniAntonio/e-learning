@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Home</title>
+<link href="webjars/bootstrap/3.3.2/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="webjars/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+</head>
+<body>
+	<div th:replace="templates/header :: headertemplate"></div>
+	<div class="jumbotron text-center">
+		<h1>E-Learning</h1>
+		<p>
+			Welcome to E-Learning <span th:text="${user.firstname}"></span> <span
+				th:text="${user.lastname}"></span>
+		</p>
+	</div>
+	<div class="container text-center">
+		<div class="row">
+			<div>
+				<h2>About E-Learning</h2>
+				<br>
+				<h4>E-learning is a learning environment which uses information
+					and communication technologies (ICT's) as a platform for teaching
+					and learning activities. It has been defined as "pedagogy empowered
+					by technology, though 'digital technology' is more accurate. Note
+					that, due to the difference in terms of institutional goals, higher
+					education and the industry have very different ideas about what
+					e-learning is and how e-learning can be/should be used. E-learning
+					has its root in distance learning and is part of the revolution
+					brought by the new media: the Web. Educators and trainers soon
+					found the potentials to advance learning at the advent of the new
+					Web technologies. The advocates of e-learning voice for the
+					breakdown of barriers to learning (especially for adult learners in
+					higher education) such as the limitations in time and distance.
+					Research on media comparison "proves" that there is no difference
+					in the learning outcome of e-learning from traditional face-to-face
+					instruction. Over time, more and more instructors/institutions are
+					incorporating e-learning components in the practice of instruction
+					in higher education as a way of facilitating learning.</h4>
+
+			</div>
+
+		</div>
+	</div>
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+</body>
+</html>

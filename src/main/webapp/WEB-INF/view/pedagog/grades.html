@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Grades</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+</head>
+<body>
+	<div th:replace="templates/pedagogueHeader :: headertemplate"></div>
+	<div th:switch="${userGrades}">
+		<h2>All Grades</h2>
+		<div th:if="${message}" th:text="${message}"
+			th:class="${'alert ' + alertClass}" role="alert"></div>
+		<div th:case="*">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">FirstName</th>
+						<th scope="col">LastName</th>
+						<th scope="col">Grade</th>
+					</tr>
+				</thead>
+				<tbody th:if="${#lists.isEmpty(userGrades)}">
+					<tr>
+						<td colspan="3">No Grades found.</td>
+					</tr>
+				</tbody>
+				<tbody>
+					<tr th:each="userGrade : ${userGrades}">
+						<td scope="row" th:text="${userGrade.firstName}"></td>
+						<td th:text="${userGrade.lastName}"></td>
+						<td th:text="${userGrade.grade}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+</body>
+</html>

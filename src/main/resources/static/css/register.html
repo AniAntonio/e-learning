@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<link href="webjars/bootstrap/3.3.2/css/bootstrap.min.css"
+	rel="stylesheet" media="screen" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+<title>Register</title>
+</head>
+<body>
+	<div class="login-page">
+		<div class="form">
+			<div th:if="${message}" th:text="${message}"
+				th:class="${'alert ' + alertClass}"></div>
+			<form class="login-form" th:action="@{/register}" th:object="${user}"
+				method="post">
+				<label for="username">Username</label> <input type="text"
+					th:field="*{username}" id="username"
+					placeholder="Username must be 3-50 letters" th:required="required">
+				<span th:if="${#fields.hasErrors('username')}"
+					th:errors="*{username}"> </span> <label>Username</label> <label
+					for="password">Password</label> <input type="password"
+					th:field="*{password}" id="password"
+					placeholder="password must be 3-50 letters" th:required="required">
+				<span th:if="${#fields.hasErrors('password')}"
+					th:errors="*{password}"></span> <label for="firstname">Firstname</label>
+				<input type="text" th:field="*{firstname}" id="firstname"
+					placeholder="firstName must be 3-50 letters" th:required="required">
+				<span th:if="${#fields.hasErrors('firstname')}"
+					th:errors="*{firstname}"></span> <label for="lastname">LastName</label>
+				<input type="text" th:field="*{lastname}" id="lastname"
+					placeholder="lastname must be 3-50 letters" th:required="required">
+				<span th:if="${#fields.hasErrors('lastname')}"
+					th:errors="*{lastname}"></span><label for="email">Email</label> <input
+					type="text" th:field="*{email}" id="email"
+					placeholder="example@gmail.com" th:required="required"> <span
+					th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+				</span>
+				<button>Sign Up</button>
+			</form>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="webjars/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Online Test</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+
+<link rel="stylesheet"
+	href="../static/sweetalert/dist/sweetalert2.min.css"
+	th:href="@{/sweetalert/dist/sweetalert2.min.css}">
+<link rel="stylesheet" href="../static/select2/css/select2.min.css"
+	th:href="@{/select2/css/select2.min.css}">
+<link rel="stylesheet"
+	href="../static/select2/css/select2-bootstrap.css"
+	th:href="@{/select2/css/select2-bootstrap.css}">
+
+<link rel="stylesheet" href="../static/css/toastr.min.css"
+	th:href="@{/css/toastr.min.css}">
+<link rel="stylesheet" href="../static/css/my-styles.css"
+	th:href="@{/css/my-styles.css}">
+
+</head>
+
+<!-- toast container custom element, add this to your index page / default template -->
+<toast-container
+	params='
+                     timeout: 4000,
+                     showClose: false,
+                     pushTo: "top",
+                     limit: 5,
+                     toasts: toaster.toasts'>
+<!-- supply toasts from toaster to custom element must required --> </toast-container>
+
+<body>
+	<div th:replace="templates/studentHeader :: headertemplate"></div>
+
+
+	<div class="container">
+		<div class="row">
+
+			<form>
+
+				<div class="offset-md-2 col-sm-8">
+
+					<!-- ko if: questions().length > 0  -->
+					<div class="form-group">
+						<label for="description">Description</label> <input
+							data-bind="value: activeQuestion().description" type="text"
+							name="description" class="form-control" readonly id="description">
+					</div>
+
+					<div class="form-group">
+						<label for="type">Tipi</label> <input
+							data-bind="value: activeQuestion().typeDescription" type="text"
+							name="description" class="form-control" readonly id="type"
+							aria-describedby="emailHelp">
+					</div>
+
+
+					<!-- ko foreach: activeQuestion().alternatives -->
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<!-- ko if: !isCorrect() -->
+
+							<!-- ko if: $parent.activeQuestion().questionTypeId == 4 -->
+							<button class="btn btn-outline-success"
+								data-bind="click: function(data, event) { $parent.setCorrect($index, data, event); }"
+								type="button">Set as Correct</button>
+							<!-- /ko -->
+
+							<!-- ko ifnot: $parent.activeQuestion().questionTypeId == 4 -->
+							<button class="btn btn-outline-success"
+								data-bind="click: function(data, event) { $parent.setCorrect($index, data, event); },
+                                                    enable: !$parent.yesNoCorrectAnswerAlreadySet()"
+								type="button">Set as Correct</button>
+							<!-- /ko -->
+
+							<!-- /ko -->
+							<!-- ko ifnot: !isCorrect() -->
+							<button class="btn btn-outline-danger"
+								data-bind="click: function(data, event) { $parent.removeAsCorrect($index, data, event); }"
+								type="button">Remove as Correct</button>
+							<!-- /ko -->
+
+						</div>
+						<input type="text" readonly data-bind="value: name"
+							class="form-control" aria-label="Text input with radio button">
+					</div>
+					<!-- /ko -->
+
+					<!-- ko if: questions().length -1 > currentIndex()  -->
+					<button data-bind="click: nextQuestion" type="submit"
+						class="btn btn-outline-info">
+						Next question <i class="fa fa-arrow-right"></i>
+					</button>
+					<!-- /ko -->
+
+					<!-- ko ifnot: questions().length -1 > currentIndex()  -->
+					<button data-bind="click: submit" type="submit"
+						class="btn btn-primary">
+						<i class="fa fa-save"></i> Posto pergjigjet
+					</button>
+					<!-- /ko -->
+
+					<!-- /ko -->
+
+					<!-- ko ifnot: questions().length > 0  -->
+					<div class="alert alert-warning alert-dismissible fade show"
+						role="alert" data-dismiss="alert">
+						<strong>Warning!</strong> Nuk ekzistojne pyetje per kete test!
+						<button type="button" class="close" data-dismiss="alert"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<!-- /ko -->
+
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+
+
+	<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+	<script src="../static/js/knockout.min.js"
+		th:src="@{/js/knockout.min.js}"></script>
+	<script src="../static/js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+	<script src="../static/js/datepicker.min.js"
+		th:src="@{/js/datepicker.min.js}"></script>
+
+	<script src="../static/sweetalert/dist/sweetalert2.min.js"
+		th:src="@{/sweetalert/dist/sweetalert2.min.js}"></script>
+	<script src="../static/select2/js/select2.min.js"
+		th:src="@{/select2/js/select2.min.js}"></script>
+	<script src="../static/js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+
+	<script type="text/javascript" th:inline="javascript">
+
+	  var questions = /*[[${questions}]]*/ {};
+      var testId = /*[[${test.id}]]*/ {};
+      var courseId = /*[[${test.courseDto.id}]]*/ {};
+
+      function Question(id, description, alternatives, questionTypeId, typeDescription) {
+          var self = this;
+          self.id = id;
+          self.description = description;
+          self.alternatives = [];
+          self.questionTypeId = questionTypeId;
+          self.typeDescription = typeDescription;
+          alternatives.forEach((alternative, i) => {
+              self.alternatives[i] = new Alternative(alternative.id, alternative.name, false)
+          })
+      }
+
+      var q = [];
+      questions.forEach((question, i) => {
+          q[i] = new Question(question.id, question.description, question.alternatives, question.questionType.questionTypeId, question.questionType.typeName);
+      });
+
+      console.log(q);
+
+      function Alternative(id, name, isCorrect) {
+          var self = this;
+          self.id = id;
+          self.name = name;
+          self.isCorrect = ko.observable(isCorrect);
+      }
+
+      $(function () {
+
+          function AppViewModel() {
+              var self = this;
+              var current = 0;
+              self.currentIndex = ko.observable(0);
+              self.questions = ko.observableArray(q);
+              self.activeQuestion = ko.observable(q[0]);
+              self.alternatives = ko.observableArray();
+              self.yesNoCorrectAnswerAlreadySet = ko.observable(false);
+
+              self.setCorrect = function (i, data, event) {
+                  data.isCorrect(true);
+                  self.yesNoCorrectAnswerAlreadySet(true);
+              };
+
+              self.removeAsCorrect = function (i, data, event) {
+                  data.isCorrect(false);
+                  self.yesNoCorrectAnswerAlreadySet(false);
+              };
+
+
+              self.addAlternative = function () {
+                  self.alternatives.push(new Alternative("", false));
+              };
+
+              self.nextQuestion = function () {
+                  console.log(self.yesNoCorrectAnswerAlreadySet());
+                  if (self.yesNoCorrectAnswerAlreadySet()) {
+                      current += 1;
+                      self.currentIndex(current);
+                      self.activeQuestion(q[self.currentIndex()]);
+                      self.yesNoCorrectAnswerAlreadySet(false);
+                  }
+              }
+
+              self.submit = function () {
+                  var string = ko.toJSON(self.questions);
+                  let request = JSON.parse(string);
+
+                  request.forEach(question => {
+                      question.alternatives = question.alternatives.filter(alternative => alternative.isCorrect);
+                  });
+
+                  console.log(request);
+                  $.ajax({
+                      type: "POST",
+                      contentType: "application/json",
+                      url: "/e-learning/rest/student/submit-test/" + testId,
+                      data: JSON.stringify(request),
+                      success: function (data) {
+                          console.log('success');
+                          window.location.href = '/e-learning/Home'
+                      }
+                  });
+
+              }
+
+          }
+
+          ko.applyBindings(new AppViewModel());
+
+      });
+
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Courses</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" th:href="@{/css/adminHome.css}" />
+
+<link rel="stylesheet"
+	href="../static/sweetalert/dist/sweetalert2.min.css"
+	th:href="@{/sweetalert/dist/sweetalert2.min.css}">
+<link rel="stylesheet" href="../static/select2/css/select2.min.css"
+	th:href="@{/select2/css/select2.min.css}">
+<link rel="stylesheet"
+	href="../static/select2/css/select2-bootstrap.css"
+	th:href="@{/select2/css/select2-bootstrap.css}">
+
+<link rel="stylesheet" href="../static/css/toastr.min.css"
+	th:href="@{/css/toastr.min.css}">
+<link rel="stylesheet" href="../static/css/my-styles.css"
+	th:href="@{/css/my-styles.css}">
+
+</head>
+
+<!-- toast container custom element, add this to your index page / default template -->
+<toast-container
+	params='
+                     timeout: 4000,
+                     showClose: false,
+                     pushTo: "top",
+                     limit: 5,
+                     toasts: toaster.toasts'>
+<!-- supply toasts from toaster to custom element must required --> </toast-container>
+
+<body>
+	<div th:replace="templates/pedagogueHeader :: headertemplate"></div>
+
+
+	<div class="container">
+		<div class="row">
+
+			<div class="col-md-12">
+				<h2>Create question</h2>
+			</div>
+			<div class="col-md-12">
+
+				<div class="form-group">
+					<label for="exampleInputEmail1">Pershkrim</label> <input
+						data-bind="value: description" type="text" name="description"
+						class="form-control" id="exampleInputEmail1"
+						aria-describedby="emailHelp">
+				</div>
+				<div class="form-group">
+					<label for="exampleFormControlSelect1">Tipi</label> <select
+						id="exampleFormControlSelect1" class="form-control"
+						data-bind="options: questionTypes,
+                       optionsText: 'typeName',
+                       value: selectedType,
+                       event: {change: typeChange},
+                       optionsCaption: 'Choose...'"></select>
+				</div>
+
+				<!-- ko if: selectedType() ? selectedType().questionTypeId == 1 : false -->
+				<!-- ko foreach: alternatives -->
+
+				<div class="input-group">
+
+					<!-- ko if: !isCorrect() -->
+					<span class="input-group-btn">
+						<button class="btn btn-success btn-outline"
+							data-bind="click: function(data, event) { $parent.setCorrect($index, data, event); },
+                                enable: !$parent.yesNoCorrectAnswerAlreadySet()"
+							type="button">Set Correct</button>
+					</span>
+					<!-- /ko -->
+
+					<!-- ko ifnot: !isCorrect() -->
+					<span class="input-group-btn">
+						<button class="btn btn-danger btn-outline"
+							data-bind="click: function(data, event) { $parent.removeAsCorrect($index, data, event); }"
+							type="button">Remove as Correct</button>
+					</span>
+					<!-- /ko -->
+
+					<input type="text" class="form-control" readonly
+						data-bind="value: name">
+				</div>
+				<br>
+				<!-- /ko -->
+				<!-- /ko -->
+
+				<!-- ko if: selectedType() ? selectedType().questionTypeId == 2 : false -->
+				<!-- ko foreach: alternatives -->
+
+				<div class="input-group">
+
+					<!-- ko if: !isCorrect() -->
+					<span class="input-group-btn">
+						<button class="btn btn-success btn-outline"
+							data-bind="click: function(data, event) { $parent.setCorrect($index, data, event); },
+                                enable: !$parent.yesNoCorrectAnswerAlreadySet()"
+							type="button">Set Correct</button>
+					</span>
+					<!-- /ko -->
+
+					<!-- ko ifnot: !isCorrect() -->
+					<span class="input-group-btn">
+						<button class="btn btn-danger btn-outline"
+							data-bind="click: function(data, event) { $parent.removeAsCorrect($index, data, event); }"
+							type="button">Remove as Correct</button>
+					</span>
+					<!-- /ko -->
+
+					<input type="text" class="form-control" data-bind="value: name">
+				</div>
+				<br>
+				<!-- /ko -->
+				<div class="form-group">
+					<button class="btn-sm btn btn-info"
+						data-bind="click: addAlternative">Add Alternative</button>
+				</div>
+				<!-- /ko -->
+
+				<!-- ko if: selectedType() ? selectedType().questionTypeId == 3 : false -->
+				<!-- ko foreach: alternatives -->
+
+				<div class="input-group">
+
+					<!-- ko if: !isCorrect() -->
+					<span class="input-group-btn">
+						<button class="btn btn-success btn-outline"
+							data-bind="click: function(data, event) { $parent.setCorrect($index, data, event); }"
+							type="button">Set Correct</button>
+					</span>
+					<!-- /ko -->
+
+					<!-- ko ifnot: !isCorrect() -->
+					<span class="input-group-btn">
+						<button class="btn btn-danger btn-outline"
+							data-bind="click: function(data, event) { $parent.removeAsCorrect($index, data, event); }"
+							type="button">Remove as Correct</button>
+					</span>
+					<!-- /ko -->
+
+					<input type="text" class="form-control" data-bind="value: name">
+				</div>
+
+				<br>
+				<!-- /ko -->
+				<div class="form-group">
+					<button class="btn-sm btn btn-info"
+						data-bind="click: addAlternative">Add Alternative</button>
+				</div>
+				<!-- /ko -->
+				<button data-bind="click: submit" type="submit"
+					class="btn btn-primary">Submit</button>
+
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="templates/footer :: footertemplate"> </footer>
+
+
+	<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+	<script src="../static/js/knockout.min.js"
+		th:src="@{/js/knockout.min.js}"></script>
+	<script src="../static/js/moment.min.js" th:src="@{/js/moment.min.js}"></script>
+	<script src="../static/js/datepicker.min.js"
+		th:src="@{/js/datepicker.min.js}"></script>
+
+	<script src="../static/sweetalert/dist/sweetalert2.min.js"
+		th:src="@{/sweetalert/dist/sweetalert2.min.js}"></script>
+	<script src="../static/select2/js/select2.min.js"
+		th:src="@{/select2/js/select2.min.js}"></script>
+	<script src="../static/js/toastr.min.js" th:src="@{/js/toastr.min.js}"></script>
+
+	<script type="text/javascript" th:inline="javascript">
+
+        var questionTypes = /*[[${questionTypes}]]*/ {};
+
+        function QyestionType(data) {
+            this.questionTypeId = data.questionTypeId;
+            this.typeName = data.typeName;
+        }
+
+        var types = [];
+        questionTypes.forEach(type => {
+            types.push(new QyestionType(type))
+        });
+
+        function Alternative(name, isCorrect) {
+            var self = this;
+            self.name = name;
+            self.isCorrect = ko.observable(isCorrect);
+        }
+
+        $(function () {
+
+            function AppViewModel() {
+                var self = this;
+                self.description = ko.observable("");
+                self.questionTypes = ko.observableArray(types);
+                self.selectedType = ko.observable();
+                self.alternatives = ko.observableArray();
+                self.yesNoCorrectAnswerAlreadySet = ko.observable(false);
+
+                self.setCorrect = function (i, data, event) {
+                    if (self.selectedType().questionTypeId === 3) {
+                    
+                        var correct = self.alternatives().filter(alternative => alternative.isCorrect());
+                        if (correct.length + 1 === this.alternatives().length) {
+                            toaster.error({
+                                title: 'Error!',
+                                msg: "You can't make all alternatives correct!",
+                                timeout: 0,
+                                showClose: true,
+                                clickToClose: false
+                            });
+                        } else {              
+                            data.isCorrect(true);
+                            self.yesNoCorrectAnswerAlreadySet(true);
+                        }
+
+                    } else {
+                        data.isCorrect(true);
+                        self.yesNoCorrectAnswerAlreadySet(true);
+                    }
+                    console.log(self.alternatives());
+                };
+
+                self.removeAsCorrect = function (i, data, event) {
+                    data.isCorrect(false);
+                    self.yesNoCorrectAnswerAlreadySet(false);
+                };
+
+
+                self.typeChange = function () {
+                    self.alternatives([]);
+                    self.yesNoCorrectAnswerAlreadySet(false);
+                    if (self.selectedType().questionTypeId === 1) {
+                        self.alternatives.push(new Alternative("Yes", false));
+                        self.alternatives.push(new Alternative("No", false));
+                    } else {
+                        self.alternatives.push(new Alternative("", false));
+                    }
+                };
+
+                self.addAlternative = function () {
+                    self.alternatives.push(new Alternative("", false));
+                };
+
+                self.submit = function () {
+                    var request = {
+                        description: self.description(),
+                        questionType: self.selectedType(),
+                        alternatives: self.alternatives().map(alternative => {
+                            return {
+                                name: alternative.name,
+                                isCorrect: alternative.isCorrect()
+                            }
+                        })
+                    };
+                    console.log(request);
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        url: "/e-learning/rest/pedagogue/create-question",
+                        data: JSON.stringify(request),
+                        success: function (data) {
+                            console.log('success');
+                            window.location.href = '/e-learning/Home'
+                        }
+                    });
+
+                }
+
+            }
+
+            ko.applyBindings(new AppViewModel());
+
+        });
+
+
+    </script>
+
+</body>
+</html>
